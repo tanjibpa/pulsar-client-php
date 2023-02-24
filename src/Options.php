@@ -174,6 +174,7 @@ abstract class Options implements ArrayAccess
     /**
      * @return array
      */
+    #[\ReturnTypeWillChange]
     public function all(): array
     {
         return $this->data;
