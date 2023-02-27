@@ -15,7 +15,7 @@
 	},
 	"require": {
 		"php": ">=7.0",
-		"google/crc32": "dev-master as 0.1.1",
+		"google/crc32": "dev-master",
 		"protobuf-php/protobuf": "^0.1.3"
 	},
 	"require-dev": {
