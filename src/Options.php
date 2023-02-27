@@ -174,7 +174,6 @@ abstract class Options implements ArrayAccess
     /**
      * @return array
      */
-    #[\ReturnTypeWillChange]
     public function all(): array
     {
         return $this->data;
@@ -195,6 +194,7 @@ abstract class Options implements ArrayAccess
      * @param $offset
      * @return mixed|null
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->data[ $offset ] ?? null;
