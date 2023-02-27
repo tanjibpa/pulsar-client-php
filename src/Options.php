@@ -206,6 +206,7 @@ abstract class Options implements ArrayAccess
      * @param $value
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         $this->data[ $offset ] = $value;
@@ -217,6 +218,7 @@ abstract class Options implements ArrayAccess
      * @return void
      * @throws OptionsException
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         throw new OptionsException('Prohibit deletion');
