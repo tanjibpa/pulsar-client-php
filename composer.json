@@ -18,12 +18,6 @@
 		"protobuf-php/protobuf": "^0.1.3",
 		"google/crc32": "dev-master as 0.1.0"
 	},
-	"repositories": [
-		{
-			"type": "vcs",
-			"url": "git@github.com:google/php-crc32.git"
-		}
-	],
 	"require-dev": {
 		"symfony/var-dumper": "^3.4"
 	}
