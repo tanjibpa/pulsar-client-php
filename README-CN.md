@@ -8,6 +8,7 @@
     * [安装](#安装)
     * [生产者](#生产者)
     * [消费者](#消费者)
+    * [Schema](#Schema)
     * [Reader](#Reader)
     * [可选项配置](#可选项配置)
     * [License](#License)
@@ -243,6 +244,81 @@ while ($running) {
 }
 ```
 
+## Schema
+
+- 目前只支持 `INT8`、`INT16`、`INT32`、`INT64`、`DOUBLE`、`STRING`、`JSON`，以下代码以 `JSON Schema` 为示例
+- https://pulsar.apache.org/docs/2.11.x/schema-overview/
+- https://avro.apache.org/docs/1.11.1/specification/
+
+- `model.php`
+
+```php
+<?php
+
+class Person
+{
+    public $id;
+    public $name;
+    public $age;
+    // ...
+}
+```
+
+- 生产者配置`Schema`
+
+```php
+<?php
+$define = '{"type":"record","name":"Person","fields":[{"name":"id","type":"int"},{"name":"name","type":"string"},{"name":"age","type":"int"}]}';
+$schema = new \Pulsar\Schema\SchemaJson($define, [
+    'key' => 'value',
+]);
+
+// ... some code
+$producerOptions->setSchema($schema);
+$producer = new \Pulsar\Producer('xx',$options);
+$producer->connect();
+
+$person = new Person();
+$person->id = 1;
+$person->name = 'Tony';
+$person->age = 18;
+
+// 可以直接发送 $person 对象
+$id = $producer->send($person);
+```
+
+- 消费者配置`Schema`
+
+ ```php
+<?php
+$define = '{"type":"record","name":"Person","fields":[{"name":"id","type":"int"},{"name":"name","type":"string"},{"name":"age","type":"int"}]}';
+
+$schema = new \Pulsar\Schema\SchemaJson($define, [
+    'key' => 'value',
+]);
+
+// ... 省略一些初始化的代码
+$consumerOptions->setSchema($schema);
+$consumer = new \Pulsar\Consumer('pulsar://xxx',$consumerOptions);
+$consumer->connect();
+
+while (true) {
+    $message = $consumer->receive();
+    $person = new Person();
+    $message->getSchemaValue($person);
+    echo sprintf(
+        'payload %s id %d name %s age %d',
+        $message->getPayload(),
+        $person->id,
+        $person->name,
+        $person->age
+    ) . "\n";
+    
+    // .. some code
+}
+
+```
+
 ## Reader
 
 ```php
@@ -297,6 +373,7 @@ $reader->close();
     * setConnectTimeout()
     * setProducerName()
     * setCompression()
+    * setSchema()
 * ConsumerOptions
     * setTopic()
     * setTopics()
@@ -310,6 +387,7 @@ $reader->close();
     * setDeadLetterPolicy()
     * setSubscriptionInitialPosition()
     * setReconnectPolicy()
+    * setSchema()
 * ReaderOptions
     * setTopic()
     * setAuthentication()
